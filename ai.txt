@@ -1,0 +1,6 @@
+site: Pipeline Proof
+domain: https://dsotn.com
+usage: training=allow, search=allow, citation=allow, attribution=preferred
+scope: Public CI/CD and developer-tool security articles.
+contact: https://dsotn.com/about.html
+

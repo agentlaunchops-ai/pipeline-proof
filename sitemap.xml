@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://dsotn.com/</loc>
+    <lastmod>2026-06-07</lastmod>
+  </url>
+  <url>
+    <loc>https://dsotn.com/articles/</loc>
+    <lastmod>2026-06-07</lastmod>
+  </url>
+  <url>
+    <loc>https://dsotn.com/articles/github-actions-security-checklist/</loc>
+    <lastmod>2026-06-07</lastmod>
+    <image:image>
+      <image:loc>https://dsotn.com/assets/images/articles/github-actions-security-checklist.jpg</image:loc>
+      <image:caption>Server rack photograph used for an article about CI pipeline hardening.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://dsotn.com/about.html</loc>
+    <lastmod>2026-06-07</lastmod>
+  </url>
+</urlset>
+

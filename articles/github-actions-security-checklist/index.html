@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GitHub Actions Security Checklist for CI Pipelines</title>
+  <meta name="description" content="A practical GitHub Actions security checklist for CI pipelines: permissions, pinned actions, unsafe scripts, secrets, and dependency visibility.">
+  <link rel="canonical" href="https://dsotn.com/articles/github-actions-security-checklist/">
+  <meta property="og:site_name" content="Pipeline Proof">
+  <meta property="og:title" content="GitHub Actions Security Checklist for CI Pipelines">
+  <meta property="og:description" content="A practical GitHub Actions security checklist for CI pipelines: permissions, pinned actions, unsafe scripts, secrets, and dependency visibility.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://dsotn.com/articles/github-actions-security-checklist/">
+  <meta property="og:image" content="https://dsotn.com/og/articles/github-actions-security-checklist.png">
+  <meta property="article:published_time" content="2026-06-07">
+  <meta property="article:modified_time" content="2026-06-07">
+  <meta property="article:author" content="Pipeline Proof Editorial">
+  <meta property="article:section" content="CI/CD Security">
+  <meta property="article:tag" content="GitHub Actions">
+  <meta property="article:tag" content="CI/CD">
+  <meta property="article:tag" content="Supply Chain Security">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://dsotn.com/og/articles/github-actions-security-checklist.png">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "GitHub Actions Security Checklist for CI Pipelines",
+    "author": {
+      "@type": "Organization",
+      "name": "Pipeline Proof Editorial",
+      "url": "https://dsotn.com/about.html#contributors"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Pipeline Proof",
+      "url": "https://dsotn.com/"
+    },
+    "datePublished": "2026-06-07",
+    "dateModified": "2026-06-07",
+    "articleSection": "CI/CD Security",
+    "keywords": ["GitHub Actions security", "CI/CD security", "workflow permissions", "supply chain security"],
+    "wordCount": 1210,
+    "timeRequired": "PT7M",
+    "mainEntityOfPage": "https://dsotn.com/articles/github-actions-security-checklist/",
+    "articleBody": "Start by treating GitHub Actions as a release surface, not just a task runner. The checklist below focuses on permissions, pinned actions, untrusted input, secrets, and workflow dependency visibility.",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://dsotn.com/assets/images/articles/github-actions-security-checklist.jpg",
+      "width": 1200,
+      "height": 903
+    },
+    "speakable": {
+      "@type": "SpeakableSpecification",
+      "cssSelector": ["#key-takeaways", "#article-summary", "#editorial-summary"]
+    },
+    "citation": [
+      {
+        "@type": "CreativeWork",
+        "name": "Secure use reference",
+        "publisher": "GitHub Docs",
+        "url": "https://docs.github.com/en/actions/reference/security/secure-use"
+      },
+      {
+        "@type": "CreativeWork",
+        "name": "Workflow syntax for GitHub Actions",
+        "publisher": "GitHub Docs",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#permissions"
+      },
+      {
+        "@type": "CreativeWork",
+        "name": "Use GITHUB_TOKEN for authentication in workflows",
+        "publisher": "GitHub Docs",
+        "url": "https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication"
+      },
+      {
+        "@type": "CreativeWork",
+        "name": "Scorecard checks",
+        "publisher": "OpenSSF Scorecard",
+        "url": "https://github.com/ossf/scorecard/blob/main/docs/checks.md"
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://dsotn.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Articles",
+        "item": "https://dsotn.com/articles/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "GitHub Actions Security Checklist for CI Pipelines",
+        "item": "https://dsotn.com/articles/github-actions-security-checklist/"
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="Main">
+      <a class="brand" href="/">Pipeline Proof</a>
+      <div class="nav-links">
+        <a href="/articles/">Articles</a>
+        <a href="/about.html">About</a>
+      </div>
+    </nav>
+  </header>
+  <main class="wrap hero">
+    <div class="article-shell">
+      <article class="article">
+        <p class="eyebrow">CI/CD Security</p>
+        <h1>GitHub Actions Security Checklist for CI Pipelines</h1>
+        <p class="meta">By <a href="/about.html#contributors">Pipeline Proof Editorial</a> · Published 2026-06-07 · Updated 2026-06-07 · 7 min read</p>
+        <img class="article-hero" src="/assets/images/articles/github-actions-security-checklist.jpg" alt="A rack of servers photographed in a data-center setting." width="1200" height="903">
+        <p id="article-summary" class="lede">Start by treating GitHub Actions as a release surface, not just a task runner. The checklist below focuses on permissions, pinned actions, untrusted input, secrets, and workflow dependency visibility.</p>
+
+        <aside class="callout" role="note" aria-label="Editorial note" data-callout-tone="info">
+          <strong>Editorial note:</strong> This article is informational engineering guidance, not a substitute for a security review of a specific repository.
+        </aside>
+
+        <section id="key-takeaways">
+          <h2>Key takeaways for a first workflow audit</h2>
+          <ul>
+            <li>Set `GITHUB_TOKEN` permissions to the minimum each workflow or job needs; GitHub documents both workflow-level and job-level `permissions` controls.<sup><a href="#ref-workflow-permissions">2</a></sup></li>
+            <li>Do not assume omitting `GITHUB_TOKEN` from a step fully hides it; GitHub says actions can access the token through the `github.token` context.<sup><a href="#ref-github-token">3</a></sup></li>
+            <li>Pin third-party actions to a full-length commit SHA when the workflow is sensitive; GitHub documents repository and organization policies for requiring full-length SHA pinning.<sup><a href="#ref-secure-use">1</a></sup></li>
+            <li>Watch `pull_request_target` carefully: GitHub documents that this trigger receives read/write repository permission even when triggered from a public fork.<sup><a href="#ref-workflow-permissions">2</a></sup></li>
+            <li>Use the dependency graph and Dependabot for action visibility, but remember GitHub says Dependabot alerts for vulnerable actions do not fire for actions pinned to SHA values.<sup><a href="#ref-secure-use">1</a></sup></li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>The bottom line is least privilege plus reviewable dependencies</h2>
+          <div class="callout" id="bottom-line" role="note" aria-label="Bottom line" data-callout-tone="info">
+            A practical first pass is simple: restrict the token, pin external actions, keep untrusted input out of shell scripts, and make workflow dependencies visible before they run release or deploy steps.
+          </div>
+          <p>GitHub Actions workflows are code paths that can read repository data, call APIs, publish packages, and deploy systems. GitHub's workflow syntax lets you define `permissions` at the workflow level or inside a specific job, and GitHub states that unspecified permissions are set to `none` once any permission is specified.<sup><a href="#ref-workflow-permissions">2</a></sup></p>
+          <p>That makes a short audit worthwhile even for small repositories. A CI file that only needs to run tests can usually use read-only content access, while an issue-commenting job can grant only the issue or pull-request scopes it needs.<sup><a href="#ref-github-token">3</a></sup></p>
+        </section>
+
+        <section>
+          <h2>A narrow permissions block beats a broad default token</h2>
+          <p>Start each workflow by deciding what the job actually changes. GitHub's `GITHUB_TOKEN` guide says the `permissions` key can modify token permissions for an entire workflow or for individual jobs, and it recommends granting the least required access.<sup><a href="#ref-github-token">3</a></sup></p>
+          <ul class="checklist">
+            <li>Use `permissions: contents: read` for build and test jobs that only clone code.</li>
+            <li>Grant `issues: write` or `pull-requests: write` only to jobs that actually comment, label, or update those objects.<sup><a href="#ref-workflow-permissions">2</a></sup></li>
+            <li>Use `id-token: write` only for jobs that need OpenID Connect, because GitHub lists that permission as the one that fetches an OIDC token.<sup><a href="#ref-workflow-permissions">2</a></sup></li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Full-length SHA pinning reduces action update surprise</h2>
+          <p>Third-party actions are dependencies. GitHub's secure-use reference says a full-length commit SHA is the only way to use an action as an immutable release, and it also describes repository and organization policies that require actions to be pinned to a full-length commit SHA.<sup><a href="#ref-secure-use">1</a></sup></p>
+          <p>OpenSSF Scorecard treats unpinned workflow dependencies as a supply-chain risk: its `Pinned-Dependencies` check lists workflow dependency pinning by hash as a remediation for GitHub workflows used in build and release paths.<sup><a href="#ref-scorecard">4</a></sup></p>
+          <div class="callout" role="note" aria-label="Evidence" data-callout-tone="evidence">
+            <strong>Evidence:</strong> For sensitive release workflows, the action reference should be reviewable as a specific commit, not only as a moving tag.
+          </div>
+        </section>
+
+        <section>
+          <h2>Untrusted context should not flow straight into shell</h2>
+          <p>GitHub's secure-use reference has a dedicated section on mitigating script injection attacks. Its recommended approaches include using an action instead of an inline script and moving untrusted values into intermediate environment variables before shell execution.<sup><a href="#ref-secure-use">1</a></sup></p>
+          <p>This matters most in pull request workflows, issue-triggered workflows, and manual-dispatch workflows that turn user-controlled fields into shell commands. Treat values such as titles, branch names, labels, issue bodies, and dispatch inputs as untrusted until they are quoted, validated, or passed through a safer interface.</p>
+        </section>
+
+        <section>
+          <h2>Secrets should move toward short-lived access where possible</h2>
+          <p>GitHub's secure-use reference recommends considering OpenID Connect for workflows that deploy to cloud providers or use Vault, because OIDC can create short-lived, well-scoped access tokens for workflow runs.<sup><a href="#ref-secure-use">1</a></sup></p>
+          <p>That does not remove every secret from CI, but it changes the failure mode. A long-lived cloud key sitting in repository secrets can stay valid after a bad workflow run; a short-lived OIDC-issued token is scoped to a particular run and policy.</p>
+        </section>
+
+        <section>
+          <h2>Dependency visibility has one important SHA-pinning caveat</h2>
+          <p>GitHub says the dependency graph recognizes workflow files as manifests and parses action references written as `jobs[*].steps[*].uses` or reusable workflows written as `jobs.&lt;job_id&gt;.uses`.<sup><a href="#ref-secure-use">1</a></sup></p>
+          <p>GitHub also says Dependabot can monitor actions in workflows and create alerts when GitHub Advisory Database advisories apply, but it notes that Dependabot only creates alerts for vulnerable actions that use semantic versioning and does not create alerts for actions pinned to SHA values.<sup><a href="#ref-secure-use">1</a></sup></p>
+          <div class="callout" role="note" aria-label="Caution" data-callout-tone="caution">
+            <strong>Caution:</strong> Pinning and alerting solve different problems. Pinning reduces surprise changes; advisory monitoring helps find known vulnerable dependencies. You need both practices, plus an update process.
+          </div>
+        </section>
+
+        <section>
+          <h2>A short local audit catches the easy-to-miss YAML risks</h2>
+          <p>Before adding a new release workflow, run a local review for broad token permissions, unpinned actions, `pull_request_target`, unsafe shell interpolation, and missing timeouts. A small workflow scanner is enough for a first pass if it reports the exact file, job, and setting to inspect.</p>
+          <p>That command is not a complete security program. It is a fast way to surface workflow patterns worth reviewing before a CI file starts publishing packages, writing comments, or deploying infrastructure.</p>
+        </section>
+
+        <section>
+          <h2>References</h2>
+          <ol class="references">
+            <li id="ref-secure-use"><a href="https://docs.github.com/en/actions/reference/security/secure-use">GitHub Docs: Secure use reference</a>.</li>
+            <li id="ref-workflow-permissions"><a href="https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#permissions">GitHub Docs: Workflow syntax, permissions</a>.</li>
+            <li id="ref-github-token"><a href="https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication">GitHub Docs: Use GITHUB_TOKEN for authentication in workflows</a>.</li>
+            <li id="ref-scorecard"><a href="https://github.com/ossf/scorecard/blob/main/docs/checks.md">OpenSSF Scorecard: checks documentation</a>.</li>
+          </ol>
+        </section>
+
+        <section id="editorial-summary">
+          <h2>Editorial review status</h2>
+          <p>Pipeline Proof has not commissioned independent expert review of this article. See <a href="/about.html#contributors">contributors</a> and <a href="/about.html#sourcing">sourcing</a> for the current editorial posture. Send corrections through the project links on <a href="/about.html">About</a>. Sources: 4 entries, all official or primary project documentation, last reviewed 2026-06-07.</p>
+        </section>
+      </article>
+
+      <aside class="toc" aria-label="Table of contents">
+        <strong>On this page</strong>
+        <a href="#key-takeaways">Key takeaways</a>
+        <a href="#bottom-line">Bottom line</a>
+        <a href="#ref-secure-use">References</a>
+        <a href="/articles/">All articles</a>
+      </aside>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">Pipeline Proof publishes informational engineering content. See <a href="/about.html#sourcing">sourcing</a> and <a href="/CREDITS.md">credits</a>.</div>
+  </footer>
+</body>
+</html>

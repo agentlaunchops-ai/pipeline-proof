@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "audit": "node scripts/audit.mjs"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,22 @@
+# Pipeline Proof
+
+> Pipeline Proof publishes cited, practical articles on CI/CD pipeline security, GitHub Actions hardening, and developer-tool release risk.
+
+## Navigation
+
+- [Home](https://dsotn.com/)
+- [Articles](https://dsotn.com/articles/)
+- [About](https://dsotn.com/about.html)
+- [Credits](https://dsotn.com/CREDITS.md)
+
+## Articles by Category
+
+### CI/CD Security (1)
+
+- [GitHub Actions Security Checklist for CI Pipelines](https://dsotn.com/articles/github-actions-security-checklist/)
+
+## Auxiliary Resources
+
+- [Sitemap](https://dsotn.com/sitemap.xml)
+- [Robots](https://dsotn.com/robots.txt)
+
